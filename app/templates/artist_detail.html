@@ -1,4 +1,30 @@
+{% if request.user.is_authenticated %}
+	<a href="/logout/">logout</a>
+{% else %}
+	<a href="/signin/">signin</a>
+{% endif %}
+<br>
+
 {{ artist.artist_id}}<br>
 {{ artist.artist_handle }}<br>
 {{ artist.artist_name }}<br>
 {{ artist.artist_url }}<br>
+
+<h3>Albums</h3>
+{% if request.user.is_superuser %}
+<a href="/create_album/">create</a>
+<br>
+{% endif %}
+{% for album in artist.album_set.all %}
+
+	{% if request.user.is_superuser %}
+		{{ album.album_title }}
+		<a href="/edit_album/{{ album.pk }}">| edit |</a>
+		<a href="/delete_album/{{ album.pk }}">| delete |</a>
+		<br>
+	{% else %}
+		{{ album.album_title }}
+		<br>
+	{% endif %}
+	
+{% endfor %}

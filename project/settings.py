@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -39,6 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'app',
 )
+
+AUTH_USER_MODEL = 'app.CustomUser'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

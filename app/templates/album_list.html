@@ -1,0 +1,3 @@
+{% for album in albums %}
+	<a href="/album_detail/{{ album.pk }}/">{{ album.album_title }}</a><br>
+{% endfor %}
