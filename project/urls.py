@@ -25,5 +25,11 @@ urlpatterns = [
 
     url(r'^delete_album/(?P<pk>.+)/$', 'app.views.delete_album'),
 
+    url(r'^profile/$', 'app.views.profile_page'),
+    url(r'^edit_profile/$', 'app.views.edit_profile'),
+    url(r'^fav_artist/(?P<pk>.+)/$', 'app.views.fav_artist'),
+    url(r'^unfav_artist/(?P<pk>.+)/$', 'app.views.unfav_artist'),
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

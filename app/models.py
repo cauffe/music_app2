@@ -45,12 +45,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
     objects = CustomUserManager()
 
+    fav_artists = models.ManyToManyField('app.Artist')
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+    def __unicode__(self):
+        return self.email
 
     def get_absolute_url(self):
         return '/users/%s' % urlquote(self.email)

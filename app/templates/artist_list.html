@@ -9,10 +9,20 @@
 		{% if artist %}
 		<div class="col-md-3">
 			<a href="/artist_detail/{{ artist.pk }}/">
-			
 				{{ artist.artist_name }}
-			
-		</a>
+			</a> 
+
+			{% if artist not in request.user.fav_artists.all %}
+				<a href="/fav_artist/{{ artist.pk }}/">
+					+
+				</a>
+			{% else %}
+				<a href="/unfav_artist/{{ artist.pk }}/">
+					-
+				</a>
+			{% endif %}
+
+
 		</div>
 		{% endif %}
 

@@ -1,13 +1,74 @@
-from django.shortcuts import render, redirect, render_to_response
-from app.models import Artist, Album
-from app.forms import CustomUserCreationForm, CustomUserLoginForm, CreateAlbumForm, EditAlbumForm
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from app.models import Artist, Album, CustomUser
+from app.forms import EditProfileForm, CustomUserCreationForm, CustomUserLoginForm, CreateAlbumForm, EditAlbumForm
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
+
+def unfav_artist(request, pk):
+
+	user = CustomUser.objects.get(pk=request.user.pk)
+
+	artist = Artist.objects.get(pk=pk)
+
+	user.fav_artists.remove(artist)
+
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	
+def fav_artist(request, pk):
+
+	user = CustomUser.objects.get(pk=request.user.pk)
+
+	artist = Artist.objects.get(pk=pk)
+
+	user.fav_artists.add(artist)
+
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+	# return redirect('/artist_list/')
+
+
+
+
+
+def profile_page(request):
+
+	context = {}
+
+	print request.user
+	print request.user.pk
+
+	try:
+		context['user'] = CustomUser.objects.get(pk=request.user.pk)
+	except Exception, e:
+		raise Http404('404')
+
+	return render(request, 'profile_page.html', context)
+
+def edit_profile(request):
+
+	context = {}
+
+	try:
+		user = CustomUser.objects.get(pk=request.user.pk)
+	except Exception, e:
+		raise Http404('404')
+
+	form = EditProfileForm(request.POST or None, instance=user)
+
+	context['form'] = form
+
+	if form.is_valid():
+		form.save()
+		return redirect('/profile/')
+	else:
+		print form.errors
+
+	return render(request, 'edit_profile.html', context)
 
 @staff_member_required
 def delete_album(request, pk):
